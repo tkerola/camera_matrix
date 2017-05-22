@@ -4,7 +4,7 @@
 import numpy as np
 
 def rotx(t):
-    """Rotation about the x-axis."""
+    """Creates a matrix that rotates t radians around the x axis."""
     c = np.cos(t)
     s = np.sin(t)
     return np.array([[1,  0,  0],
@@ -13,7 +13,7 @@ def rotx(t):
 
 
 def roty(t):
-    """Rotation about the y-axis."""
+    """Creates a matrix that rotates t radians around the y axis."""
     c = np.cos(t)
     s = np.sin(t)
     return np.array([[c,  0,  s],
@@ -22,7 +22,7 @@ def roty(t):
 
 
 def rotz(t):
-    """Rotation about the z-axis."""
+    """Creates a matrix that rotates t radians around the z axis."""
     c = np.cos(t)
     s = np.sin(t)
     return np.array([[c, -s,  0],
@@ -35,8 +35,11 @@ def rot_matrix(rx, ry, rz):
 
 
 def yaw_pitch_roll_from_rot_matrix(R):
-    # Assumes rotation to have been
-    # applied in order R = R_z * R_y * R_x.
+    """Recovers yaw, pitch roll from a rotation matrix.
+
+    Assumes rotation to have been
+    applied in the order R = R_z * R_y * R_x.
+    """
     yaw = np.arctan(R[1, 0] / R[0, 0])
     pitch = np.arctan(-R[2, 0] / np.sqrt(R[2, 1]**2 + R[2, 2]**2))
     roll = np.arctan(R[2, 1] / R[2, 2])
