@@ -68,7 +68,7 @@ def project(p, K, E):
     - E: Extrinsic matrix of the camera. shape = (3, 4)
 
     Returns:
-    - p_image: Point(s) projected to the image plane.
+    - p_image: Point(s) projected to the image plane. shape = (2, n)
     """
     print("Projecting {} onto image".format(p))
     if len(p.shape) != 2:
@@ -91,14 +91,14 @@ def backproject(u, K, R, t, n, p0):
 
     Keyword args:
     - u: Image coordinates to project. shape = (2, n)
-    - K: Intrinsic matrix of the camera.
-    - R: World rotation matrix from the camera.
-    - t: World translation vector from the camera.
-    - n: The normal vector of the plane.
-    - p0: A known point on the plane.
+    - K: Intrinsic matrix of the camera. shape = (3, 3)
+    - R: World rotation matrix from the camera. shape = (3, 3)
+    - t: World translation vector from the camera. shape = (3,)
+    - n: The normal vector of the plane. shape = (3,)
+    - p0: A known point on the plane. shape = (3,)
 
     Returns:
-    - p: Image coordinate backprojected onto the world.
+    - p: Image coordinate backprojected onto the world. shape = (3, n)
     """
     print("Backprojecting {} onto a plane".format(u))
     if len(u.shape) != 2:
@@ -115,7 +115,7 @@ def backproject(u, K, R, t, n, p0):
 
     RKinvp = R.T.dot(Kinv).dot(u)
     p = (d - n.dot(c)) / n.dot(RKinvp)[None, :] * RKinvp + c
-    print("Result is p =\n{}".format(p))
+    print("Result i p ({}) =\n{}".format(p.shape, p))
     return p
 
 

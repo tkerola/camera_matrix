@@ -138,11 +138,15 @@ class PinholeCameraVisualization(object):
             # And project them back to the world again to verify that backprojection works.
             p_bp = backproject(p_image, K, R, t, n=self.plane_normal, p0=self.plane_point)
 
+            # Project grid of image coordinates onto world
+            p_im_grid = np.reshape(np.meshgrid(range(0, self.img_w, 50), range(0, self.img_h, 50)), (2, -1))
+            p_bp_grid = backproject(p_im_grid, K, R, t, n=self.plane_normal, p0=self.plane_point)
+
             cam_arrow_end = cam_pos + R_cam.dot(np.array([0, 0, 1]))
 
             if self.l_world is None:
                 ax_world.scatter(p[0, :], p[1, :], p[2, :], c='blue')
-                self.l_world = ax_world.scatter(p_bp[0, :], p_bp[1, :], c='red')
+                self.l_world = ax_world.scatter(p_bp[0, :], p_bp[1, :], p_bp[2, :], c='red')
                 self.l_cam = ax_world.scatter(cam_pos[0], cam_pos[1], cam_pos[2],
                                          c='black')
                 self.cam_arrow = Arrow3D([cam_pos[0], cam_arrow_end[0]],
@@ -153,7 +157,10 @@ class PinholeCameraVisualization(object):
                 ax_world.add_artist(self.cam_arrow)
                 self.cam_frustum = Frustum(img_w, img_h)
                 self.cam_frustum.add_to_axis(ax_world)
-                self.l_image = ax_image.scatter(p_image[0, :], p_image[1, :], c='green')
+                self.l_image = ax_image.scatter(p_image[0, :], p_image[1, :], c='red')
+
+                self.l_world_grid = ax_world.scatter(p_bp_grid[0, :], p_bp_grid[1, :], p_bp_grid[2, :], c='green')
+                ax_image.scatter(p_im_grid[0, :], p_im_grid[1, :], c='green')
 
             # Update positions
             self.l_world._offsets3d = (p_bp[0, :], p_bp[1, :], p_bp[2, :])
@@ -163,6 +170,7 @@ class PinholeCameraVisualization(object):
                                        [cam_pos[2], cam_arrow_end[2]])
             self.cam_frustum.update(cam_pos, K, R)
             self.l_image.set_offsets(p_image[:2, :].T)
+            self.l_world_grid._offsets3d = (p_bp_grid[0, :], p_bp_grid[1, :], p_bp_grid[2, :])
             fig.canvas.draw_idle()
 
         s_x0.on_changed(update)
@@ -187,7 +195,7 @@ def main():
                         help='Normal of the plane to backproject points onto.')
     parser.add_argument('--plane-point', '-p', type=float, nargs=3, default=[0, 2, 0],
                         help='Point on the plane to backproject points onto.')
-    parser.add_argument('--world_boundary', '-w', type=float, default=2,
+    parser.add_argument('--world_boundary', '-w', type=float, default=5,
                         help='Limits of the world coordinates.')
     args = parser.parse_args()
 
