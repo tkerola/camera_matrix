@@ -9,9 +9,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 import pykitti
 
-from camera import recover_intrinsic_extrinsic, backproject, project
-from utils import rot_matrix, yaw_pitch_roll_from_rot_matrix
-from plot_utils import Arrow3D, Frustum, create_slider
+from camera_matrix.camera import recover_intrinsic_extrinsic, backproject, project
+from camera_matrix.utils import rot_matrix, yaw_pitch_roll_from_rot_matrix
+from camera_matrix.plot_utils import Arrow3D, Frustum, create_slider
 
 
 class PinholeCameraVisualization(object):
