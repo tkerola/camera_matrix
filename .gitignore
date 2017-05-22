@@ -1,0 +1,10 @@
+*~
+*.egg/
+*.pyc
+*.pyo
+*.cpp
+*.so
+build
+\#*\#
+.\#*
+.coverage
