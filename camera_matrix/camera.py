@@ -86,7 +86,7 @@ def project(p, K, E):
     return u
 
 
-def backproject(u, K, R, t, n, p0):
+def backproject(u, K, R, t, n, p0, keep_only_pos_z=False):
     """Backprojects the image coordinates u onto a plane.
 
     Keyword args:
@@ -115,7 +115,11 @@ def backproject(u, K, R, t, n, p0):
 
     RKinvp = R.T.dot(Kinv).dot(u)
     p = (d - n.dot(c)) / n.dot(RKinvp)[None, :] * RKinvp + c
-    print("Result i p ({}) =\n{}".format(p.shape, p))
+    if keep_only_pos_z:
+        p = R.dot(p) + t
+        p = p[:, p[2, :] > 0]
+        p = R.T.dot(p - t)
+    print("Result is p ({}) =\n{}".format(p.shape, p))
     return p
 
 

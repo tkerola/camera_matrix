@@ -140,7 +140,7 @@ class PinholeCameraVisualization(object):
 
             # Project grid of image coordinates onto world
             p_im_grid = np.reshape(np.meshgrid(range(0, self.img_w, 50), range(0, self.img_h, 50)), (2, -1))
-            p_bp_grid = backproject(p_im_grid, K, R, t, n=self.plane_normal, p0=self.plane_point)
+            p_bp_grid = backproject(p_im_grid, K, R, t, n=self.plane_normal, p0=self.plane_point, keep_only_pos_z=True)
 
             cam_arrow_end = cam_pos + R_cam.dot(np.array([0, 0, 1]))
 
