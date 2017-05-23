@@ -70,7 +70,7 @@ def project(p, K, E):
     Returns:
     - p_image: Point(s) projected to the image plane. shape = (2, n)
     """
-    print("Projecting {} onto image".format(p))
+    # print("Projecting {} onto image".format(p))
     if len(p.shape) != 2:
         p = p[:, None]
     if p.shape[0] != 4:
@@ -80,9 +80,9 @@ def project(p, K, E):
     # print(K)
     # print("E")
     # print(E)
-    print("u before divide:\n{}".format(u))
+    # print("u before divide:\n{}".format(u))
     u = u[:2, :] / u[2, :]  # If u[2, :] is negative, then the points are not visible.
-    print("Result is u =\n{}".format(u))
+    # print("Result is u =\n{}".format(u))
     return u
 
 
@@ -100,7 +100,7 @@ def backproject(u, K, R, t, n, p0, keep_only_pos_z=False):
     Returns:
     - p: Image coordinate backprojected onto the world. shape = (3, n)
     """
-    print("Backprojecting {} onto a plane".format(u))
+    # print("Backprojecting {} onto a plane".format(u))
     if len(u.shape) != 2:
         u = u[:, None]
     if u.shape[0] != 3:
@@ -119,7 +119,7 @@ def backproject(u, K, R, t, n, p0, keep_only_pos_z=False):
         p = R.dot(p) + t
         p = p[:, p[2, :] > 0]
         p = R.T.dot(p - t)
-    print("Result is p ({}) =\n{}".format(p.shape, p))
+    # print("Result is p ({}) =\n{}".format(p.shape, p))
     return p
 
 
